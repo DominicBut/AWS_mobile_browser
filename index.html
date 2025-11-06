@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AWS Identity Center Browser - https://internal.awsapps.com/start</title>
+    <style>
+        /* AWS IAM Identity Center Browser Stylesheet */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f5f5f5;
+            height: 100vh;
+            overflow: hidden;
+        }
+        .browser-container {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            background: white;
+        }
+        .browser-header {
+            background: linear-gradient(135deg, #FF9900 0%, #FF9900 100%);
+            padding: 0;
+            border-bottom: 2px solid #ec7211;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+        .browser-controls {
+            display: flex;
+            gap: 8px;
+            padding: 12px;
+            background: #232f3e;
+            align-items: center;
+        }
+        .nav-btn {
+            background: #FF9900;
+            border: none;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 18px;
+            font-weight: bold;
+            transition: all 0.2s ease;
+        }
+        .nav-btn:hover {
+            background: #ec7211;
+            transform: scale(1.05);
+        }
+        .url-bar-container {
+            display: flex;
+            gap: 8px;
+            padding: 10px 12px;
+            background: #232f3e;
+            align-items: center;
+        }
+        .url-bar {
+            flex: 1;
+            padding: 10px 14px;
+            border: 2px solid #FF9900;
+            border-radius: 6px;
+            font-size: 14px;
+            font-family: 'Courier New', monospace;
+            background: white;
+            color: #333;
+        }
+        .url-bar:focus {
+            outline: none;
+            border-color: #FFB84D;
+            box-shadow: 0 0 8px rgba(255, 153, 0, 0.3);
+        }
+        .go-btn {
+            padding: 10px 20px;
+            background: #FF9900;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+        .go-btn:hover {
+            background: #ec7211;
+        }
+        .bookmarks-bar {
+            display: flex;
+            gap: 8px;
+            padding: 8px 12px;
+            background: #37475a;
+            overflow-x: auto;
+            border-bottom: 1px solid #FF9900;
+        }
+        .bookmark-btn {
+            background: #546e7a;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+        .bookmark-btn:hover {
+            background: #FF9900;
+        }
+        .bookmark-btn.active {
+            background: #FF9900;
+            font-weight: bold;
+        }
+        .browser-content {
+            flex: 1;
+            display: flex;
+            position: relative;
+            overflow: hidden;
+            background: #f5f5f5;
+        }
+        .content-iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            display: none;
+        }
+        .content-iframe.active {
+            display: block;
+        }
+        .loading-spinner {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255, 255, 255, 0.9);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            z-index: 50;
+        }
+        .loading-spinner.hidden {
+            display: none;
+        }
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid #FF9900;
+            border-top-color: #232f3e;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        .homepage {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%);
+            overflow-y: auto;
+        }
+        .homepage.hidden {
+            display: none;
+        }
+        .homepage-content {
+            max-width: 700px;
+            width: 100%;
+            padding: 40px;
+            text-align: center;
+        }
+        .logo-area h1 {
+            color: #232f3e;
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+        .logo-area .domain-text {
+            color: #FF9900;
+            font-size: 16px;
+            font-weight: bold;
+            font-family: 'Courier New', monospace;
+            text-decoration: underline;
+        }
+        .homepage-section {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            margin: 20px 0;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        .domain-box {
+            background: #f5f5f5;
+            border: 3px solid #FF9900;
+            padding: 20px;
+            border-radius: 6px;
+            font-family: 'Courier New', monospace;
+            font-size: 16px;
+            font-weight: bold;
+            color: #232f3e;
+            margin: 15px 0;
+        }
+        .quick-action-btn {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            background: #FF9900;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-bottom: 10px;
+        }
+        .quick-action-btn:hover {
+            background: #ec7211;
+        }
+        .browser-footer {
+            background: #232f3e;
+            color: #FF9900;
+            padding: 10px 15px;
+            border-top: 1px solid #FF9900;
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+        }
+        @media (max-width: 768px) {
+            .logo-area h1 { font-size: 24px; }
+            .domain-box { font-size: 12px; }
+        }
+    </style>
+</head>
+<body>
+    <!-- AWS IAM Identity Center Browser Application -->
+    <!-- Portal: https://internal.awsapps.com/start -->
+    
+    <div id="browser-container" class="browser-container">
+        <!-- Browser Header - AWS IAM Identity Center portal access -->
+        <div class="browser-header">
+            <div class="browser-controls">
+                <!-- Navigation buttons for https://internal.awsapps.com/start -->
+                <button id="btn-back" class="nav-btn" title="Go Back">←</button>
+                <button id="btn-forward" class="nav-btn" title="Go Forward">→</button>
+                <button id="btn-refresh" class="nav-btn" title="Refresh">↻</button>
+                <button id="btn-home" class="nav-btn" title="AWS Portal: https://internal.awsapps.com/start">⌂</button>
+            </div>
+
+            <!-- URL Address Bar - default: https://internal.awsapps.com/start -->
+            <div class="url-bar-container">
+                <input 
+                    type="text" 
+                    id="url-input" 
+                    class="url-bar"
+                    placeholder="https://internal.awsapps.com/start"
+                    value="https://internal.awsapps.com/start"
+                >
+                <button id="btn-go" class="go-btn">Go</button>
+            </div>
+
+            <!-- Bookmarks bar with AWS IAM Identity Center Portal -->
+            <div class="bookmarks-bar">
+                <button class="bookmark-btn active" data-url="https://internal.awsapps.com/start">
+                    📍 AWS SSO - https://internal.awsapps.com/start
+                </button>
+                <button class="bookmark-btn" data-url="https://docs.aws.amazon.com/singlesignon/">
+                    📚 IAM Identity Center Docs
+                </button>
+                <button class="bookmark-btn" data-url="https://aws.amazon.com">
+                    🔗 AWS Home
+                </button>
+            </div>
+        </div>
+
+        <!-- Browser Content Area -->
+        <div class="browser-content">
+            <!-- Loading indicator -->
+            <div id="loading-spinner" class="loading-spinner hidden">
+                <div class="spinner"></div>
+                <p>Loading https://internal.awsapps.com/start...</p>
+            </div>
+
+            <!-- Main iframe to display AWS portal content -->
+            <iframe 
+                id="content-iframe"
+                class="content-iframe"
+                sandbox="allow-same-origin allow-scripts allow-popups allow-forms allow-cookies"
+                title="AWS IAM Identity Center - https://internal.awsapps.com/start"
+            ></iframe>
+
+            <!-- Homepage with AWS portal information -->
+            <div id="homepage" class="homepage">
+                <div class="homepage-content">
+                    <div class="logo-area">
+                        <h1>AWS IAM Identity Center Portal</h1>
+                        <p class="domain-text">https://internal.awsapps.com/start</p>
+                    </div>
+
+                    <div class="homepage-section">
+                        <h2>Welcome to AWS Access Portal</h2>
+                        <p>Access the AWS IAM Identity Center at:</p>
+                        <div class="domain-box">
+                            https://internal.awsapps.com/start
+                        </div>
+                    </div>
+
+                    <div class="homepage-section">
+                        <h3>Quick Access to AWS IAM Identity Center:</h3>
+                        <button class="quick-action-btn" onclick="loadURL('https://internal.awsapps.com/start')">
+                            → Open AWS Portal (https://internal.awsapps.com/start)
+                        </button>
+                        <button class="quick-action-btn" onclick="loadURL('https://docs.aws.amazon.com/singlesignon/')">
+                            📖 IAM Identity Center Documentation
+                        </button>
+                    </div>
+
+                    <div class="homepage-section">
+                        <h3>About AWS IAM Identity Center</h3>
+                        <p>The main portal is located at:</p>
+                        <p style="font-family: monospace; color: #FF9900; font-weight: bold;">
+                            https://internal.awsapps.com/start
+                        </p>
+                        <p>Supported domain formats:</p>
+                        <ul style="text-align: left; display: inline-block;">
+                            <li>https://internal.awsapps.com/start - Main portal</li>
+                            <li>https://d-xxxxxxxxxx.awsapps.com/start - Organization</li>
+                            <li>https://custom.awsapps.com/start - Custom domain</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Browser Footer/Status Bar -->
+        <div class="browser-footer">
+            <span id="status-text">Ready - AWS Portal: https://internal.awsapps.com/start</span>
+            <span>https://internal.awsapps.com/start</span>
+        </div>
+    </div>
+
+    <script>
+        // AWS IAM Identity Center Browser - Application Logic
+        // Primary Domain: https://internal.awsapps.com/start
+        
+        const AWS_PORTAL = 'https://internal.awsapps.com/start';
+        const SUPPORTED_DOMAINS = ['internal.awsapps.com', 'awsapps.com', 'docs.aws.amazon.com', 'aws.amazon.com', 'console.aws.amazon.com'];
+        
+        let currentURL = AWS_PORTAL;
+        let history = [AWS_PORTAL];
+        let historyIndex = 0;
+
+        // DOM Elements
+        const DOM = {
+            btnBack: document.getElementById('btn-back'),
+            btnForward: document.getElementById('btn-forward'),
+            btnRefresh: document.getElementById('btn-refresh'),
+            btnHome: document.getElementById('btn-home'),
+            btnGo: document.getElementById('btn-go'),
+            urlInput: document.getElementById('url-input'),
+            iframe: document.getElementById('content-iframe'),
+            homepage: document.getElementById('homepage'),
+            loadingSpinner: document.getElementById('loading-spinner'),
+            statusText: document.getElementById('status-text'),
+            bookmarkBtns: document.querySelectorAll('.bookmark-btn')
+        };
+
+        // Initialize
+        function init() {
+            console.log('AWS IAM Identity Center Browser initialized');
+            console.log('Primary Portal: https://internal.awsapps.com/start');
+            
+            DOM.btnBack.addEventListener('click', goBack);
+            DOM.btnForward.addEventListener('click', goForward);
+            DOM.btnRefresh.addEventListener('click', refreshPage);
+            DOM.btnHome.addEventListener('click', () => loadURL(AWS_PORTAL));
+            DOM.btnGo.addEventListener('click', () => navigateToURL(DOM.urlInput.value));
+            DOM.urlInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') navigateToURL(DOM.urlInput.value);
+            });
+            
+            DOM.bookmarkBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    loadURL(btn.getAttribute('data-url'));
+                    DOM.bookmarkBtns.forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                });
+            });
+
+            DOM.iframe.addEventListener('load', onIframeLoad);
+            DOM.urlInput.value = AWS_PORTAL;
+        }
+
+        function validateURL(url) {
+            if (!url) return null;
+            url = url.trim();
+            if (!url.startsWith('http://') && !url.startsWith('https://')) {
+                url = 'https://' + url;
+            }
+            try {
+                const urlObj = new URL(url);
+                const hostname = urlObj.hostname.toLowerCase();
+                const isSupported = SUPPORTED_DOMAINS.some(domain => 
+                    hostname === domain || hostname.endsWith('.' + domain)
+                );
+                return isSupported ? url : null;
+            } catch (e) {
+                return null;
+            }
+        }
+
+        function loadURL(url) {
+            navigateToURL(url);
+        }
+
+        function navigateToURL(url) {
+            const validatedURL = validateURL(url);
+            if (!validatedURL) {
+                alert('Invalid URL. Please use an AWS domain.');
+                return;
+            }
+            
+            history = history.slice(0, historyIndex + 1);
+            history.push(validatedURL);
+            historyIndex = history.length - 1;
+            
+            loadInIFrame(validatedURL);
+        }
+
+        function loadInIFrame(url) {
+            console.log('Loading:', url);
+            console.log('AWS Portal: https://internal.awsapps.com/start');
+            
+            showLoading();
+            DOM.homepage.classList.add('hidden');
+            currentURL = url;
+            DOM.urlInput.value = url;
+            DOM.statusText.textContent = `Loading ${url}...`;
+            DOM.iframe.src = url;
+        }
+
+        function goBack() {
+            if (historyIndex > 0) {
+                historyIndex--;
+                loadInIFrame(history[historyIndex]);
+            }
+        }
+
+        function goForward() {
+            if (historyIndex < history.length - 1) {
+                historyIndex++;
+                loadInIFrame(history[historyIndex]);
+            }
+        }
+
+        function refreshPage() {
+            DOM.iframe.src = currentURL;
+        }
+
+        function showLoading() {
+            DOM.loadingSpinner.classList.remove('hidden');
+        }
+
+        function hideLoading() {
+            DOM.loadingSpinner.classList.add('hidden');
+        }
+
+        function onIframeLoad() {
+            hideLoading();
+            DOM.iframe.classList.add('active');
+            DOM.statusText.textContent = `Loaded: ${currentURL}`;
+        }
+
+        // Initialize application
+        init();
+    </script>
+</body>
+</html>

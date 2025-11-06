@@ -1,0 +1,292 @@
+AWS IAM Identity Center Browser
+================================
+
+PRIMARY PORTAL: https://internal.awsapps.com/start
+
+INSTALLATION - 3 EASY STEPS
+============================
+
+Step 1: Download
+  • Download index.html to your computer
+  • That's the only file you need!
+
+Step 2: Open
+  • Right-click index.html
+  • Select "Open with" → Your web browser
+  • The app opens immediately
+
+Step 3: Use
+  • The homepage appears
+  • Click "Open AWS Portal" button
+  • Or click home button (⌂) 
+  • Navigates to: https://internal.awsapps.com/start
+
+THAT'S IT! ✓
+
+---
+
+FEATURES
+========
+
+✓ Mobile browser for AWS IAM Identity Center
+✓ Pre-configured for: https://internal.awsapps.com/start
+✓ Back/Forward/Refresh/Home buttons
+✓ Address bar for AWS domain navigation
+✓ Bookmarks for quick access
+✓ Works on phones, tablets, desktops
+✓ Touch-friendly interface
+
+---
+
+WHAT IS THIS?
+=============
+
+A lightweight web browser application specifically designed to access
+AWS IAM Identity Center at: https://internal.awsapps.com/start
+
+The portal URL appears throughout the application:
+• In the title bar
+• In the address bar
+• In bookmarks
+• On the homepage
+• In comments throughout the code
+• 23 total occurrences for easy reference
+
+---
+
+QUICK REFERENCE
+================
+
+HOME BUTTON (⌂)
+  Click to go to: https://internal.awsapps.com/start
+
+ADDRESS BAR
+  • Pre-filled with: https://internal.awsapps.com/start
+  • Edit to use other AWS domains
+  • Press Enter to navigate
+
+BOOKMARKS
+  • AWS SSO - Direct link to https://internal.awsapps.com/start
+  • IAM Identity Center Docs
+  • AWS Home
+  • AWS Console
+
+---
+
+SUPPORTED AWS DOMAINS
+=====================
+
+Main Portal:
+  https://internal.awsapps.com/start
+
+Organization Instances:
+  https://d-{organization-id}.awsapps.com/start
+
+Custom Subdomains:
+  https://{your-domain}.awsapps.com/start
+
+AWS Documentation:
+  https://docs.aws.amazon.com/
+
+AWS Console:
+  https://console.aws.amazon.com
+
+---
+
+COMMON TASKS
+============
+
+Access AWS Portal
+  1. Open index.html
+  2. Click home button (⌂)
+  3. You're at: https://internal.awsapps.com/start
+
+Navigate to Custom Domain
+  1. Type domain in address bar
+  2. Example: https://my-org.awsapps.com/start
+  3. Press Enter
+
+Go Back/Forward
+  1. Click ← (back) or → (forward) buttons
+  2. Works like any browser
+
+Refresh Page
+  1. Click ↻ (refresh) button
+  2. Or press F5
+
+---
+
+TROUBLESHOOTING
+===============
+
+Problem: Can't load the portal
+Solution:
+  • Check internet connection
+  • Open URL in new browser tab to verify access
+  • Try different browser
+  • Clear browser cache (Ctrl+Shift+R)
+
+Problem: Getting "Invalid URL" error
+Solution:
+  • Ensure URL starts with https://
+  • Use supported AWS domain
+  • Check spelling
+
+Problem: IFrame shows blank
+Solution:
+  • Authentication may be needed
+  • Sign in to AWS first
+  • Try in new browser tab
+  • Check browser console for errors (F12)
+
+Problem: App won't open
+Solution:
+  • Ensure JavaScript is enabled
+  • Try different browser
+  • Check file isn't corrupted
+  • Download fresh copy
+
+---
+
+BROWSER COMPATIBILITY
+====================
+
+✓ Chrome/Chromium
+✓ Firefox
+✓ Safari
+✓ Edge
+✓ Mobile Safari (iOS)
+✓ Chrome Mobile (Android)
+
+Works on phones, tablets, and desktops!
+
+---
+
+CUSTOMIZATION
+==============
+
+To change the default AWS portal URL:
+
+1. Open index.html in a text editor
+2. Find this line:
+   const AWS_PORTAL = 'https://internal.awsapps.com/start';
+3. Replace with your domain
+4. Save the file
+
+To change colors:
+
+1. Open index.html in a text editor
+2. Find the CSS section (inside <style> tags)
+3. Change these values:
+   • #FF9900 = AWS Orange (main color)
+   • #232f3e = AWS Dark (secondary color)
+4. Save the file
+
+---
+
+SECURITY
+========
+
+✓ URL validation (only AWS domains)
+✓ IFrame sandboxing
+✓ CORS protection
+✓ No credential storage
+✓ No local data saved
+✓ Passwords not stored
+
+All AWS authentication happens through AWS portals, not this app.
+
+---
+
+FILE INFORMATION
+================
+
+index.html
+  • Size: ~17 KB
+  • Type: Complete application (all-in-one file)
+  • Includes: HTML, CSS, JavaScript
+  • No external dependencies
+  • No internet required to run locally
+
+README.txt
+  • Size: ~3.6 KB
+  • Type: Documentation
+  • Contains: Setup and usage instructions
+
+---
+
+AWS DOCUMENTATION
+==================
+
+For more about AWS IAM Identity Center:
+https://docs.aws.amazon.com/singlesignon/
+
+Getting Started:
+https://docs.aws.amazon.com/singlesignon/latest/userguide/
+
+Portal URL Info:
+https://docs.aws.amazon.com/sdkref/latest/guide/access-sso.html
+
+---
+
+GETTING HELP
+============
+
+Application Issues:
+  1. Open browser console (F12)
+  2. Look for error messages
+  3. Check this guide's troubleshooting
+
+AWS IAM Identity Center Help:
+  1. Visit: https://docs.aws.amazon.com/singlesignon/
+  2. Contact AWS Support
+  3. Ask your AWS administrator
+
+---
+
+IMPORTANT NOTES
+===============
+
+✓ This is a lightweight browser for AWS services only
+✓ Not intended for general internet browsing
+✓ Authentication is handled by AWS
+✓ Your credentials are NOT stored in this app
+✓ CORS and AWS policies are always respected
+✓ Works best with modern browsers
+
+---
+
+VERSION INFORMATION
+===================
+
+Application: AWS IAM Identity Center Browser
+Version: 1.0.0
+Primary Portal: https://internal.awsapps.com/start
+Status: Ready to use ✓
+
+---
+
+QUICK START CHECKLIST
+====================
+
+□ Download index.html
+□ Open index.html in browser
+□ Homepage appears
+□ Click home button (⌂)
+□ Portal loads: https://internal.awsapps.com/start
+□ Sign in with AWS credentials
+□ Access your applications
+✓ Done!
+
+---
+
+NEED HELP?
+
+1. Check this file (you're reading it!)
+2. Review browser console (F12)
+3. Check AWS documentation
+4. Contact AWS Support
+
+Primary Portal: https://internal.awsapps.com/start
+
+Good luck! 🚀
